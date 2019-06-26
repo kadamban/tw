@@ -1,0 +1,73 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: web
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: static
+  namespace: web
+  labels:
+    app: static
+    group: gateway
+spec:
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    app: static
+    group: gateway
+  type: LoadBalancer
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: static
+  namespace: web
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: static
+        group: gateway
+    spec:
+      containers:
+      - name: static
+        image: sivaprakash123/thoughtworks:webv3.1
+        ports:
+        - containerPort: 80
+        - containerPort: 443
+        readinessProbe:
+          httpGet:
+            path: /images/logo.png
+            scheme: HTTPS
+            port: 443
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          successThreshold: 1
+        resources:
+          requests:
+            memory: "64Mi"
+          limits:
+            memory: "128Mi"
+      - name: dnsmasq
+        image: janeczku/go-dnsmasq:release-1.0.5
+        args:
+          - --listen
+          - "127.0.0.1:53"
+          - --default-resolver
+          - --append-search-domains
+          - --hostsfile=/etc/hosts
+          - --verbose
+        resources:
+          requests:
+            memory: "64Mi"
+          limits:
+            memory: "128Mi"
