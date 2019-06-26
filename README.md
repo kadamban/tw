@@ -8,6 +8,10 @@ Docker is installed
 
 There are separate folders for static and app. Change directories to to build and deploy
 
+## Create EKS CLuster
+Run the cluster.sh script to create EKS cluster.
+Add the IAM keys and update other parameters to create EKS cluster with mentioned values
+
 ## Build Steps
 
 Update the Dockerfile only to update the path of static.zip and companyNews.war location.
