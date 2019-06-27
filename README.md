@@ -3,7 +3,7 @@
 ## Pre-Requesties
 
 Assuming we have Amazon EKS or Azure AKS or Stable Kubernetes cluster on Cloud.
-Tested the deployments on Kubernetes 1.8 version (kubectl 1.8)
+Tested the deployments on Kubernetes 1.13 version (kubectl 1.13)
 Docker is installed
 
 There are separate folders for static and app. Change directories to to build and deploy
